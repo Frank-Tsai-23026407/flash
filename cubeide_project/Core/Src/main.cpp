@@ -65,10 +65,6 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-//uint8_t transmitbuff[256] = {0};
-uint8_t receivebuff[256] = {0};
-
-
 /* USER CODE END 0 */
 
 /**
@@ -105,63 +101,63 @@ int main(void)
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
 
-  erpc_transport_t transport = erpc_transport_hal_uart_init(&huart3);
-    erpc_mbf_t message_buffer_factory = erpc_mbf_static_init();
-    erpc_server_init(transport, message_buffer_factory);
-    erpc_add_service_to_server(create_QSPIService_service());
+  	erpc_transport_t transport = erpc_transport_hal_uart_init(&huart3);
+	erpc_mbf_t message_buffer_factory = erpc_mbf_static_init();
+	erpc_server_init(transport, message_buffer_factory);
+	erpc_add_service_to_server(create_QSPIService_service());
 
-//    int i;
-//    for(i = 0; i < 256; i++){
-//  	  transmitbuff[i] = 0x87;
-//    }
+	//    int i;
+	//    for(i = 0; i < 256; i++){
+	//  	  transmitbuff[i] = 0x87;
+	//    }
 
-    // ======================================================
-    // initial
-    // ======================================================
-    if(CSP_QSPI_Init()!=HAL_OK) Error_Handler();
-    // check if connect correctly
-    if(CSP_SPI_ReadJEDECID(receivebuff)!=HAL_OK) Error_Handler();
-    if((receivebuff[0]!=0x9D)|(receivebuff[1]!=0x60)|(receivebuff[2]!=0x19)) Error_Handler();
-    // set Quad enable and non-protection
-    if(CSP_SPI_ConfigStatusRegister(0x40)!=HAL_OK) Error_Handler();
-    if(CSP_SPI_ReadStatusRegister(receivebuff)!=HAL_OK) Error_Handler();
-    if(receivebuff[0]!=0x40) Error_Handler();
-    // setExtendedReadParameters
-    if(CSP_SPI_SetExtendedReadParameters(0xF0)!=HAL_OK) Error_Handler();
-    // un-protected
-    if(CSP_SPI_ClearDYB()!=HAL_OK) Error_Handler();
-    // ======================================================
+	// ======================================================
+	// initial
+	// ======================================================
+//	if(CSP_QSPI_Init()!=HAL_OK) Error_Handler();
+//	// check if connect correctly
+//	if(CSP_SPI_ReadJEDECID(receivebuff)!=HAL_OK) Error_Handler();
+//	if((receivebuff[0]!=0x9D)|(receivebuff[1]!=0x60)|(receivebuff[2]!=0x19)) Error_Handler();
+//	// set Quad enable and non-protection
+//	if(CSP_SPI_ConfigStatusRegister(0x40)!=HAL_OK) Error_Handler();
+//	if(CSP_SPI_ReadStatusRegister(receivebuff)!=HAL_OK) Error_Handler();
+//	if(receivebuff[0]!=0x40) Error_Handler();
+//	// setExtendedReadParameters
+//	if(CSP_SPI_SetExtendedReadParameters(0xF0)!=HAL_OK) Error_Handler();
+//	// un-protected
+//	if(CSP_SPI_ClearDYB()!=HAL_OK) Error_Handler();
+	// ======================================================
 	// end initial
 	// ======================================================
 
-//    if(CSP_SPI_EraseSector_4ADDR(0x0fff000)!=HAL_OK) Error_Handler();
-//
-//    if(CSP_QSPI_FastReadPage_4ADDR(0x0ffff00, receivebuff)!=HAL_OK) Error_Handler();
+	//    if(CSP_SPI_EraseSector_4ADDR(0x0fff000)!=HAL_OK) Error_Handler();
+	//
+	//    if(CSP_QSPI_FastReadPage_4ADDR(0x0ffff00, receivebuff)!=HAL_OK) Error_Handler();
 
-  //  if(CSP_SPI_ReadPPB_4ADDR(0x0fff000, receivebuff)!=HAL_OK) Error_Handler();
-  //  if(CSP_SPI_ReadDYB_4ADDR(0x0fff000, receivebuff)!=HAL_OK) Error_Handler();
+	//  if(CSP_SPI_ReadPPB_4ADDR(0x0fff000, receivebuff)!=HAL_OK) Error_Handler();
+	//  if(CSP_SPI_ReadDYB_4ADDR(0x0fff000, receivebuff)!=HAL_OK) Error_Handler();
 
-//    if(CSP_QSPI_ProgramPage_4ADDR(0x0ffff00, 256, transmitbuff)!=HAL_OK) Error_Handler(); // write in
-//
-//    if(CSP_SPI_ReadExtendedReadParameter(receivebuff)!=HAL_OK) Error_Handler();			// check if there is error
-//
-//    if(CSP_QSPI_FastReadPage_4ADDR(0x0ffff00, receivebuff)!=HAL_OK) Error_Handler();		// read out
+	//    if(CSP_QSPI_ProgramPage_4ADDR(0x0ffff00, 256, transmitbuff)!=HAL_OK) Error_Handler(); // write in
+	//
+	//    if(CSP_SPI_ReadExtendedReadParameter(receivebuff)!=HAL_OK) Error_Handler();			// check if there is error
+	//
+	//    if(CSP_QSPI_FastReadPage_4ADDR(0x0ffff00, receivebuff)!=HAL_OK) Error_Handler();		// read out
 
-  //=========================================================================================================================
+	//=========================================================================================================================
 
-//    if(CSP_RealQSPI_ProgramPage_4ADDR(0x0ffff00, 256, transmitbuff)!=HAL_OK) Error_Handler(); // write in
-//
-//    if(CSP_SPI_ReadExtendedReadParameter(receivebuff)!=HAL_OK) Error_Handler();			// check if there is error
-//
-//    if(CSP_QSPI_FastReadPage_4ADDR(0x0ffff00, receivebuff)!=HAL_OK) Error_Handler();		// read out
+	//    if(CSP_RealQSPI_ProgramPage_4ADDR(0x0ffff00, 256, transmitbuff)!=HAL_OK) Error_Handler(); // write in
+	//
+	//    if(CSP_SPI_ReadExtendedReadParameter(receivebuff)!=HAL_OK) Error_Handler();			// check if there is error
+	//
+	//    if(CSP_QSPI_FastReadPage_4ADDR(0x0ffff00, receivebuff)!=HAL_OK) Error_Handler();		// read out
 
-    //=========================================================================================================================
-//
-//    if(CSP_SPI_ProgramPage_4ADDR(0x0ffff00, 256, transmitbuff)!=HAL_OK) Error_Handler();
-//
-//    if(CSP_QSPI_FastReadPage_4ADDR(0x0ffff00, receivebuff)!=HAL_OK) Error_Handler();
-//
-//    if(CSP_SPI_ReadExtendedReadParameter(receivebuff)!=HAL_OK) Error_Handler();
+	//=========================================================================================================================
+	//
+	//    if(CSP_SPI_ProgramPage_4ADDR(0x0ffff00, 256, transmitbuff)!=HAL_OK) Error_Handler();
+	//
+	//    if(CSP_QSPI_FastReadPage_4ADDR(0x0ffff00, receivebuff)!=HAL_OK) Error_Handler();
+	//
+	//    if(CSP_SPI_ReadExtendedReadParameter(receivebuff)!=HAL_OK) Error_Handler();
 
   /* USER CODE END 2 */
 
