@@ -3,20 +3,40 @@
 
 #include "qspi_rad_test.h"
 
-static uint8_t mock_mem_page[256] = {0};
+#include "main.h"
+#include "i2c.h"
+#include "quadspi.h"
+#include "usart.h"
+#include "usb_otg.h"
+#include "gpio.h"
 
-int32_t sectorErase(uint32_t addr) { return 0; }
+int32_t sectorErase(uint32_t addr) {
+	uint8_t rv;
+
+	rv = CSP_SPI_EraseSector_4ADDR(addr);
+	if (rv != HAL_OK) return rv;
+
+	return 0;
+}
 
 int32_t pageRead(uint32_t addr, uint8_t data[256]) {
-  for (int i=0;i<256;i++) {
-    data[i] = mock_mem_page[i];
-  }
-  return 0;
+	uint8_t rv;
+
+	rv = CSP_QSPI_FastReadPage_4ADDR(addr, data);
+	if (rv != HAL_OK) return rv;
+
+	return 0;
 }
 
 int32_t pageWrite(uint32_t addr, const uint8_t data[256]) {
-  for (int i=0;i<256;i++) {
-    mock_mem_page[i] = data[i];
-  }
-  return 0;
+	uint8_t rv;
+
+	int i;
+	uint8_t data_program[256];
+	for(i = 0; i < 256; i++) data_program[i] = data[i];
+
+	rv = CSP_SPI_ProgramPage_4ADDR(addr, 256, data_program);
+	if (rv != HAL_OK) return rv;
+
+	return 0;
 }
