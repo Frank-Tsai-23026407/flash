@@ -4,8 +4,8 @@ interface QSPIService {
     sectorErase(in uint32 addr) -> int32
     pageRead(in uint32 addr, out uint8[256] data) -> int32
     pageWrite(in uint32 addr, in uint8[256] data) -> int32
-	chipSelect(in uint8 chip) -> int32
-	chipInitial(out uint8 result) -> int32
-	readCurrent(out float current) -> int32
+    chipSelect(in uint8 chip) -> int32
+    chipInitial(out uint8 result) -> int32
+    readCurrent(out float current) -> int32
 }
 
