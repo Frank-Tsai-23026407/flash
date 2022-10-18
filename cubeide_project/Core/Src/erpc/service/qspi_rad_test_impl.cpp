@@ -42,13 +42,13 @@ int32_t pageWrite(uint32_t addr, const uint8_t data[256]) {
 }
 
 int32_t chipSelect(uint8_t chip) {
-
+	;
 }
 
-int32_t chipInitial(uint8_t * result) {
-
+int32_t chipInitial(uint8_t * initial_state) {
+	;
 }
 
 int32_t readCurrent(float * current) {
-
+	;
 }

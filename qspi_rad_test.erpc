@@ -6,6 +6,6 @@ interface QSPIService {
     pageWrite(in uint32 addr, in uint8[256] data) -> int32
     chipSelect(in uint8 chip) -> int32
     chipInitial(out uint8 initial_state) -> int32
-    readCurrent(out float current) -> int32
+    readCurrent(in uint8 slave_address, in uint8 memory_address, out uint8 memory_value) -> int32
 }
 
