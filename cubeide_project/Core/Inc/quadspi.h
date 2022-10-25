@@ -35,34 +35,26 @@ extern QSPI_HandleTypeDef hqspi;
 
 /* USER CODE BEGIN Private defines */
 
-uint8_t CSP_QSPI_Init(void);
-uint8_t CSP_SPI_ReadExtendedReadParameter(uint8_t* buffer);
-uint8_t CSP_SPI_ReadJEDECID(uint8_t* buffer);
-uint8_t CSP_SPI_ReadStatusRegister(uint8_t* buffer);
-uint8_t CSP_SPI_ReadStatusRegister1(uint8_t* buffer);
-uint8_t CSP_SPI_ReadStatusRegister2(uint8_t* buffer);
-uint8_t CSP_SPI_ReadReadRegister(uint8_t* buffer);
-uint8_t CSP_SPI_ConfigStatusRegister(uint8_t value);
-uint8_t CSP_SPI_ConfigStatusRegister1(uint8_t value);
-uint8_t CSP_SPI_ConfigStatusRegister2(uint8_t value);
-uint8_t CSP_SPI_ConfigReadRegister(uint8_t value);
-uint8_t CSP_SPI_SetExtendedReadParameters(uint8_t value);
-uint8_t CSP_SPI_EraseSector_4ADDR(uint32_t address);
-uint8_t CSP_SPI_FastReadPage_4ADDR(uint32_t address, uint8_t* buffer);
-uint8_t CSP_DSPI_FastReadPage_4ADDR(uint32_t address, uint8_t* buffer);
-uint8_t CSP_SPI_ProgramPage_4ADDR(uint32_t address, uint32_t length, uint8_t* buffer);
-uint8_t CSP_QSPI_ProgramPage_4ADDR(uint32_t address, uint32_t length, uint8_t* buffer);
-uint8_t CSP_QSPI_FastReadPage_4ADDR(uint32_t address, uint8_t* buffer);
-uint8_t CSP_SPI_ClearDYB();
-uint8_t CSP_SPI_ReadDYB_4ADDR(uint32_t address, uint8_t* buffer);
-uint8_t CSP_SPI_ReadPPB_4ADDR(uint32_t address, uint8_t* buffer);
-uint8_t CSP_RealQSPI_ProgramPage_4ADDR(uint32_t address, uint32_t length, uint8_t* buffer);
-
 /* USER CODE END Private defines */
 
 void MX_QUADSPI_Init(void);
 
 /* USER CODE BEGIN Prototypes */
+uint8_t CSP_SPI_Init(void);
+uint8_t CSP_SPI_ReadJEDECID(uint8_t* buffer);
+uint8_t CSP_SPI_ReadStatusRegister(uint8_t* buffer);
+uint8_t CSP_SPI_ReadStatusRegister1(uint8_t* buffer);
+uint8_t CSP_SPI_ReadStatusRegister2(uint8_t* buffer);
+uint8_t CSP_SPI_ConfigStatusRegister(uint8_t value);
+uint8_t CSP_SPI_ConfigStatusRegister1(uint8_t value);
+uint8_t CSP_SPI_ConfigStatusRegister2(uint8_t value);
+uint8_t CSP_SPI_EraseSector_4ADDR(uint32_t address);
+uint8_t CSP_SPI_FastReadPage_4ADDR(uint32_t address, uint8_t* buffer);
+uint8_t CSP_QSPI_FastReadPage_4ADDR(uint32_t address, uint8_t* buffer);
+uint8_t CSP_QSPI_FastReadPage_4ADDR_512(uint32_t address, uint8_t* buffer);
+uint8_t CSP_SPI_ProgramPage_4ADDR(uint32_t address, uint32_t length, uint8_t* buffer);
+uint8_t CSP_QSPI_ProgramPage_4ADDR(uint32_t address, uint32_t length, uint8_t* buffer);
+uint8_t CSP_RealQSPI_FastReadPage_4ADDR(uint32_t address, uint8_t* buffer);
 
 /* USER CODE END Prototypes */
 

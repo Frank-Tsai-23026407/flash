@@ -41,6 +41,8 @@ void MX_I2C1_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 
+void I2CRead1Bytes(uint16_t DevAddress, uint16_t MemAddress, uint8_t* pData);
+
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

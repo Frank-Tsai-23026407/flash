@@ -22,7 +22,6 @@
 #include "i2c.h"
 #include "quadspi.h"
 #include "usart.h"
-#include "usb_otg.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -75,9 +74,6 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 
-	uint8_t receivebuff[256] = {0};
-	uint8_t transmitbuff[256];
-
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -99,77 +95,14 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART3_UART_Init();
-  MX_USB_OTG_FS_PCD_Init();
   MX_QUADSPI_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
 
-  	erpc_transport_t transport = erpc_transport_hal_uart_init(&huart3);
+	erpc_transport_t transport = erpc_transport_hal_uart_init(&huart3);
 	erpc_mbf_t message_buffer_factory = erpc_mbf_static_init();
 	erpc_server_init(transport, message_buffer_factory);
 	erpc_add_service_to_server(create_QSPIService_service());
-
-	int i;
-	for(i = 0; i < 256; i++){
-	  transmitbuff[i] = 0x87;
-	}
-
-	// ======================================================
-	// initial
-	// ======================================================
-	if(CSP_QSPI_Init()!=HAL_OK) Error_Handler();
-	// check if connect correctly
-	if(CSP_SPI_ReadJEDECID(receivebuff)!=HAL_OK) Error_Handler();
-	if((receivebuff[0]!=0xEF)|(receivebuff[1]!=0x40)|(receivebuff[2]!=0x19)) Error_Handler();
-	// set Quad enable and non-protection
-	if(CSP_SPI_ConfigStatusRegister(0x00)!=HAL_OK) Error_Handler();
-	if(CSP_SPI_ConfigStatusRegister1(0x00)!=HAL_OK) Error_Handler();
-	if(CSP_SPI_ConfigStatusRegister2(0x00)!=HAL_OK) Error_Handler();
-	if(CSP_SPI_ReadStatusRegister(receivebuff)!=HAL_OK) Error_Handler();
-	if(CSP_SPI_ReadStatusRegister1(receivebuff)!=HAL_OK) Error_Handler();
-	if(CSP_SPI_ReadStatusRegister2(receivebuff)!=HAL_OK) Error_Handler();
-//	if(CSP_SPI_ReadStatusRegister(receivebuff)!=HAL_OK) Error_Handler();
-//	if(receivebuff[0]!=0x40) Error_Handler();
-//	// setExtendedReadParameters
-//	if(CSP_SPI_SetExtendedReadParameters(0xF0)!=HAL_OK) Error_Handler();
-//	// un-protected
-	if(CSP_SPI_ClearDYB()!=HAL_OK) Error_Handler();
-	// ======================================================
-	// end initial
-	// ======================================================
-
-	if(CSP_SPI_EraseSector_4ADDR(0x0fff000)!=HAL_OK) Error_Handler();
-	if(CSP_SPI_FastReadPage_4ADDR(0x0fff000, receivebuff)!=HAL_OK) Error_Handler();
-	//
-	//    if(CSP_QSPI_FastReadPage_4ADDR(0x0ffff00, receivebuff)!=HAL_OK) Error_Handler();
-
-	//  if(CSP_SPI_ReadPPB_4ADDR(0x0fff000, receivebuff)!=HAL_OK) Error_Handler();
-	//  if(CSP_SPI_ReadDYB_4ADDR(0x0fff000, receivebuff)!=HAL_OK) Error_Handler();
-
-	//    if(CSP_QSPI_ProgramPage_4ADDR(0x0ffff00, 256, transmitbuff)!=HAL_OK) Error_Handler(); // write in
-	//
-	//    if(CSP_SPI_ReadExtendedReadParameter(receivebuff)!=HAL_OK) Error_Handler();			// check if there is error
-	//
-	//    if(CSP_QSPI_FastReadPage_4ADDR(0x0ffff00, receivebuff)!=HAL_OK) Error_Handler();		// read out
-
-	//=========================================================================================================================
-
-	//    if(CSP_RealQSPI_ProgramPage_4ADDR(0x0ffff00, 256, transmitbuff)!=HAL_OK) Error_Handler(); // write in
-	//
-	//    if(CSP_SPI_ReadExtendedReadParameter(receivebuff)!=HAL_OK) Error_Handler();			// check if there is error
-	//
-	//    if(CSP_QSPI_FastReadPage_4ADDR(0x0ffff00, receivebuff)!=HAL_OK) Error_Handler();		// read out
-
-	//=========================================================================================================================
-	if(CSP_SPI_ReadStatusRegister(receivebuff)!=HAL_OK) Error_Handler();
-	if(CSP_SPI_ProgramPage_4ADDR(0x0ffff00, 256, transmitbuff)!=HAL_OK) Error_Handler();
-	if(CSP_SPI_ReadStatusRegister(receivebuff)!=HAL_OK) Error_Handler();
-	if(CSP_SPI_FastReadPage_4ADDR(0x0fff000, receivebuff)!=HAL_OK) Error_Handler();
-
-	//
-	//    if(CSP_QSPI_FastReadPage_4ADDR(0x0ffff00, receivebuff)!=HAL_OK) Error_Handler();
-	//
-	//    if(CSP_SPI_ReadExtendedReadParameter(receivebuff)!=HAL_OK) Error_Handler();
 
   /* USER CODE END 2 */
 
@@ -197,7 +130,7 @@ void SystemClock_Config(void)
   /** Configure the main internal regulator output voltage
   */
   __HAL_RCC_PWR_CLK_ENABLE();
-  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE3);
+  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
@@ -206,7 +139,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 4;
-  RCC_OscInitStruct.PLL.PLLN = 120;
+  RCC_OscInitStruct.PLL.PLLN = 150;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 5;
   RCC_OscInitStruct.PLL.PLLR = 2;
@@ -219,11 +152,11 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV4;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK)
   {
     Error_Handler();
   }

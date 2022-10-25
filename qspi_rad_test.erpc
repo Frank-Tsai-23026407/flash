@@ -7,5 +7,6 @@ interface QSPIService {
     chipSelect(in uint8 chip) -> int32
     chipInitial(out uint8 initial_state) -> int32
     readCurrent(in uint8 slave_address, in uint8 memory_address, out uint8 memory_value) -> int32
+	changeFrequency(in uint8 prescaler) -> int32
 }
 
